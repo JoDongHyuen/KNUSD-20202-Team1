@@ -31,4 +31,5 @@ NonFunctional Requirement
 	1. user의 LMS id,password를 안전하게 보호해야함
 
 
-	
+
+others
