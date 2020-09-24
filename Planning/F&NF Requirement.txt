@@ -40,3 +40,5 @@ NonFunctional Requirement
 
 
 others
+
+LMS 로그인 자동완성기능을 제공해야함 - nonfunctional, category(?)
