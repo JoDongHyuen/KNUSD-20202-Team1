@@ -6,6 +6,8 @@ Functional Requirement
 
 	2. user가 알람을 클릭하면 해당 공지를 브라우저를 통해
 	보여줘야함
+	
+	3. user는 지난 알람 기록들을 볼 수 있어아함
 
 	information-orientd
 	1. 각 학부홈페이지의 공지사항 정보가 필요함
