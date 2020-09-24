@@ -17,6 +17,8 @@ Functional Requirement
 	4. LMS에 새로운 과제가 올라온 경우 마감일의 정보가 필요함
 
 	5. LMS에 새로운 온라인강의가 올라온 경우 학습기한의 정보가 필요함
+ 
+	6. LMS에 유저 id, password로 접속한 계정의 수강과목정보가 필요함
 
 NonFunctional Requirement
 
