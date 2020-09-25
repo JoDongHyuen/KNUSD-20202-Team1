@@ -43,4 +43,6 @@ NonFunctional Requirement
 
 others
 
+시스템은 keyword에 해당하는 공지사항의 알림을 보낼수 있어야함
+
 LMS 로그인 자동완성기능을 제공해야함 - nonfunctional, category(?)
