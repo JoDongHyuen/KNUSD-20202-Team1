@@ -88,8 +88,8 @@ class ALARM_Window(QWidget):
         self.d_s.show()
     
 
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
-#    windowExample = ALARM_Window()
-#    windowExample.show()
-#    sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    windowExample = ALARM_Window()
+    windowExample.show()
+    sys.exit(app.exec_())
