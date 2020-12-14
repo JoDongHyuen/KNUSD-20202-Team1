@@ -87,36 +87,9 @@ class ALARM_Window(QWidget):
     def d_setting(self):
         self.d_s.show()
     
-    '''
-    def depart_UI(self):
 
-        grid_layout = QGridLayout()
-        self.setLayout(grid_layout)
-
-       # 레이블 및 버튼 추가
-        self.YbtnDialog = QPushButton("완료", self.dialog)
-        #grid_layout.addWidget(self.YbtnDialog, 1, 0)
-        self.YbtnDialog.move(200, 300)
-        self.YbtnDialog.clicked.connect(self.dialog_close)
-
-        self.NbtnDialog = QPushButton("취소", self.dialog)
-        #grid_layout.addWidget(self.NbtnDialog, 1, 1)
-        self.NbtnDialog.move(400, 300)
-        self.NbtnDialog.clicked.connect(self.dialog_close)
-
-        # QDialog 세팅
-        self.dialog.setWindowTitle('학부홈페이지 설정')
-        self.dialog.setWindowModality(Qt.ApplicationModal)
-        self.dialog.resize(600, 400)
-        self.dialog.show()
-
-        # Dialog 닫기 이벤트
-    def dialog_close(self):
-        self.dialog.close()
-    '''
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    windowExample = ALARM_Window()
-    windowExample.show()
-    sys.exit(app.exec_())
+#if __name__ == '__main__':
+#    app = QApplication(sys.argv)
+#    windowExample = ALARM_Window()
+#    windowExample.show()
+#    sys.exit(app.exec_())
