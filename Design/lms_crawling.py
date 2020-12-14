@@ -35,7 +35,15 @@ with requests.session() as s:
     print(pkg_list)
     
 
-    #여기 밑에서부터는 로그인 성공한 세션이라 크롤링 코드 짜면 됨
+    #로그인 후 알림 창을 스크래핑하는 부분
+    notification = s.get('https://lms.knu.ac.kr/ilos/mp/notification_list.acl')
+    notification_html = notification.text
+    soup = bs(notification_html, 'html.parser')
+
+    score_file = open("notfi.txt","w",encoding="utf8")
+    print(notification_html, file = score_file)
+    score_file.close()
+
 
 
 
