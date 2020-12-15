@@ -2,7 +2,7 @@ import requests, time, threading
 from win10toast import ToastNotifier
 from bs4 import BeautifulSoup
 
-from setting_depart import *
+from setting_depart import * 
 
 URL = 'https://computer.knu.ac.kr/06_sub/02_sub.html' #여기에 다른학부 URL도 추가가능
 
