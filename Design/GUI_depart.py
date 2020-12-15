@@ -118,6 +118,7 @@ class ALARM_Window(QWidget):
         self.button1 = QPushButton('On/Off')
         grid_layout.addWidget(self.button1, 1, 0)
         self.button1.setCheckable(True)
+        self.button1.clicked.connect(self.crawling_lms_state)#lms on/off버튼에 기능 연결
 
         self.button2 = QPushButton('설정')
         grid_layout.addWidget(self.button2, 2, 0)
@@ -125,7 +126,7 @@ class ALARM_Window(QWidget):
         self.button3 = QPushButton('On/Off')
         grid_layout.addWidget(self.button3, 1, 1)
         self.button3.setCheckable(True)
-        self.button3.clicked.connect(self.crawling_depart_state)#on/off버튼에 기능 연결
+        self.button3.clicked.connect(self.crawling_depart_state)#depart on/off버튼에 기능 연결
 
         self.button4 = QPushButton('설정')
         grid_layout.addWidget(self.button4, 2, 1)
@@ -139,13 +140,22 @@ class ALARM_Window(QWidget):
     def d_setting(self):
         self.d_s.show()
 
-    def crawling_depart_state(self):
-        if(self.set_depart.update_check==1):#알람이 on이였으면
-            self.set_depart.update_check=0#off 시키기
+    def crawling_depart_state(self):#학부 on/off 변경
+        if(self.set_depart.departupdate_check==1):#알람이 on이였으면
+            self.set_depart.departupdate_check=0#off 시키기
             print('크롤링을 종료합니다')#테스트용 나중에 지울것
 
-        elif(self.set_depart.update_check==0):#알람이 off이였으면
-            self.set_depart.update_check=1#on 시키기
+        elif(self.set_depart.departupdate_check==0):#알람이 off이였으면
+            self.set_depart.departupdate_check=1#on 시키기
+            print('크롤링을 시작합니다')#테스트용 나중에 지울것
+
+    def crawling_lms_state(self)::#LMS on/off 변경
+        if(self.set_depart.lmsupdate_check==1):#알람이 on이였으면
+            self.set_depart.lmsupdate_check=0#off 시키기
+            print('크롤링을 종료합니다')#테스트용 나중에 지울것
+
+        elif(self.set_depart.lmsupdate_check==0):#알람이 off이였으면
+            self.set_depart.lmsupdate_check=1#on 시키기
             print('크롤링을 시작합니다')#테스트용 나중에 지울것
     
 
