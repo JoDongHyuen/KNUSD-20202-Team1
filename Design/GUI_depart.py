@@ -1,7 +1,6 @@
 import sys, threading
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
 from setting_depart import *
 from setting_lms import *
 from crawling_depart import *
@@ -9,8 +8,17 @@ from crawling_depart import *
 set_depart = setting_depart() #setting_depart 파일의 클래스
 set_lms = setting_lms() #setting_lms 파일의 클래스
 
-class depart_set(QWidget):
+class ThreadClass(QThread): 
+    def __init__(self, parent = None): 
+        super(ThreadClass,self).__init__(parent)
+    def run(self): 
+        set_depart.load()
+        for d in set_depart.depart:
+            depart_crawl = depart_noti(d)
+            crawl_thread_depart = threading.Thread(target = depart_crawl.get_change())
+            crawl_thread_depart.start()
 
+class depart_set(QWidget):
     def __init__(self):
         super().__init__()
         self.dialog = QDialog()
@@ -97,7 +105,7 @@ class ALARM_Window(QWidget):
     
     def __init__(self):
         super().__init__()
-        
+        self.threadclass = ThreadClass()
         self.dialog = QDialog()
         self.d_s = depart_set()
 
@@ -153,14 +161,9 @@ class ALARM_Window(QWidget):
 
         elif(set_depart.departupdate_check==0):#알람이 off이였으면
             set_depart.departupdate_check=1#on 시키기
-
             print('크롤링을 시작합니다')#테스트용 나중에 지울것
             print(set_depart.departupdate_check)
-            set_depart.load()
-            for d in set_depart.depart:
-                depart_crawl = depart_noti(d)
-                crawl_thread_depart = threading.Thread(target = depart_crawl.get_change())
-                crawl_thread_depart.start()
+            self.threadclass.start()
                 
 
     def crawling_lms_state(self):#LMS on/off 변경
