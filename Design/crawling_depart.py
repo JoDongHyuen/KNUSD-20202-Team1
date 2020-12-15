@@ -17,7 +17,7 @@ class depart_noti :
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
 
-        update_check=1
+        departupdate_check=1
         pre_max =0
         num_max=0
         title = ''
@@ -38,7 +38,7 @@ class depart_noti :
 
         #1분마다 업데이트되는지 체크
         while 1:
-            if(update_check==0): #ON/OFF에서 OFF시 update_check = 0으로 할예정
+            if(departupdate_check==0): #ON/OFF에서 OFF시 update_check = 0으로 할예정
                 break
 
             time.sleep(2)

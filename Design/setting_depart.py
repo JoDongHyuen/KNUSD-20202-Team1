@@ -8,6 +8,7 @@ class setting_depart: #GUI와 연결해야함
     def __init__(self) :
         self.depart = []
         self.keyword = []
+        self.update_check = 0#현재 알람 on/off 상태 디폴트는 off인 0
 
     def load(self):
         #파일에서 설정값들 불러옴

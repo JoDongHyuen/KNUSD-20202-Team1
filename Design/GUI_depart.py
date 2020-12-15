@@ -1,14 +1,13 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-#from setting_depart import keyword
-#from setting_depart import depart
-
-keyword = []
+from setting_depart import *
 
 class depart_set(QWidget):
+
     def __init__(self):
         super().__init__()
+        self.set_depart = setting_depart() #setting_depart 파일의 클래스
         self.dialog = QDialog()
         self.setUI()
 
@@ -30,11 +29,11 @@ class depart_set(QWidget):
 
         self.btnadd = QPushButton('추가')
         self.grid_layout.addWidget(self.btnadd, 10, 10)
-        self.btnadd.clicked.connect(self.addaction)#버튼에 기능 연결
+        self.btnadd.clicked.connect(self.add_action)#추가버튼에 기능 연결
 
         self.btndelete = QPushButton('삭제')
         self.grid_layout.addWidget(self.btndelete, 20, 10)
-        self.btndelete.clicked.connect(self.deleteaction)#버튼에 기능 연결
+        self.btndelete.clicked.connect(self.delete_action)#삭제버튼에 기능 연결
 
         self.label2 = QLabel('학부 선택')
         font1 = self.label2.font()
@@ -46,6 +45,7 @@ class depart_set(QWidget):
         self.depart_list.addItem('전자공학부')
         self.depart_list.addItem('전기공학과')
         self.grid_layout.addWidget(self.depart_list, 30, 10)
+        self.depart_list.activated[str].connect(self.select_depart)
 
         self.label3 = QLabel('현재 설정된 키워드')#현재 설정된 키워드 정보 제목
         font1 = self.label3.font()
@@ -54,9 +54,9 @@ class depart_set(QWidget):
 
         self.label4 = QLabel('')#현재 설정된 키워드 정보
         font1 = self.label4.font()
-        font1.setPointSize(30)
+        font1.setPointSize(20)
         self.grid_layout.addWidget(self.label4, 1, 10)
-        now_keyword = ",".join(keyword)
+        now_keyword = ",".join(self.set_depart.keyword)
         self.label4.setText(now_keyword)
 
         # 학부홈페이지 설정 창 세팅
@@ -64,25 +64,35 @@ class depart_set(QWidget):
         self.resize(400,200)
 
     #추가버튼 클릭시 동작
-    def addaction(self) :
-        keyword.append(self.addkeyword.text())
-        now_keyword = ",".join(keyword)
-        self.label4.setText(now_keyword)
-
+    def add_action(self) :
+        for k in self.set_depart.keyword:
+            if(k == self.addkeyword.text()) : #입력한 키워드가 이미 존재할 경우
+                return
+        self.set_depart.keyword.append(self.addkeyword.text())#설정의 keyword에 키워드값 넣기
+        now_keyword = ",".join(self.set_depart.keyword)#gui 출력용
+        self.label4.setText(now_keyword)#gui 출력용
 
     #삭제버튼 클릭시 동작
-    def deleteaction(self) :
-        for k in keyword:
+    def delete_action(self) :
+        for k in self.set_depart.keyword:
             if(k == self.deletekeyword.text()) : #삭제할 키워드가 존재
-                keyword.remove(self.deletekeyword.text())
-        now_keyword = ",".join(keyword)
-        self.label4.setText(now_keyword)        
-        
+                self.set_depart.keyword.remove(self.deletekeyword.text())#설정의 keyword에 키워드값 삭제
+        now_keyword = ",".join(self.set_depart.keyword)#gui 출력용
+        self.label4.setText(now_keyword)#gui 출력용        
+
+    #학부선택시 동작
+    def select_depart(self, text):
+        self.set_depart.depart = text#설정의 depart에 학부값 넣기
+        print(self.set_depart.depart)#테스트용 출력 나중에 삭제 필요
+
+
         
 
 class ALARM_Window(QWidget):
+    
     def __init__(self):
         super().__init__()
+        self.set_depart = setting_depart() #setting_depart 파일의 클래스
         self.dialog = QDialog()
         self.d_s = depart_set()
         self.initUI()
@@ -115,6 +125,7 @@ class ALARM_Window(QWidget):
         self.button3 = QPushButton('On/Off')
         grid_layout.addWidget(self.button3, 1, 1)
         self.button3.setCheckable(True)
+        self.button3.clicked.connect(self.crawling_depart_state)#on/off버튼에 기능 연결
 
         self.button4 = QPushButton('설정')
         grid_layout.addWidget(self.button4, 2, 1)
@@ -127,6 +138,15 @@ class ALARM_Window(QWidget):
 
     def d_setting(self):
         self.d_s.show()
+
+    def crawling_depart_state(self):
+        if(self.set_depart.update_check==1):#알람이 on이였으면
+            self.set_depart.update_check=0#off 시키기
+            print('크롤링을 종료합니다')#테스트용 나중에 지울것
+
+        elif(self.set_depart.update_check==0):#알람이 off이였으면
+            self.set_depart.update_check=1#on 시키기
+            print('크롤링을 시작합니다')#테스트용 나중에 지울것
     
 
 if __name__ == '__main__':
