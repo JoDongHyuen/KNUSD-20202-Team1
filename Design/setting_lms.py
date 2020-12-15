@@ -3,7 +3,7 @@ import os
 
 login_file = "lms.txt" # 나중에 파일경로 설정해야할수도 있다
 
-class lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
+class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
 
     def __init__(self) :
         self.ID = ''
@@ -16,7 +16,7 @@ class lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
             f1 = open(login_file, 'r')
             self.ID = f1.readline()
             self.secret_PW = f1.readline()
-            decode_pw(self) #복호화
+            self.decode_pw(self) #복호화
             f1.close()
 
         else: #파일이 존재하지않으면, 만든다, 디폴트값 없음
@@ -29,7 +29,7 @@ class lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
         self.PW = PW
         f1 = open(login_file, 'w')
         f1.write(ID)
-        encode_pw(self) #암호화
+        self.encode_pw(self) #암호화
         f1.write(secret_PW)
         f1.close()
 
