@@ -2,10 +2,12 @@ import os
 
 depart_file = "depart.txt"  # 나중에 파일경로 설정해야할수도 있음
 keyword_file = "keyword.txt"
+#index_file = "depart_num.txt" #가장
 
 class setting_depart: #GUI와 연결해야함
 
     def __init__(self) :
+        #self.depart_num
         self.depart = []
         self.keyword = []
         self.departupdate_check = 0#학부의 현재 알람 on/off 상태 디폴트는 off인 0

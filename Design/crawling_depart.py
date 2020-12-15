@@ -3,15 +3,19 @@ from win10toast import ToastNotifier
 from bs4 import BeautifulSoup
 
 from setting_depart import *
+from GUI_depart import set_depart #학부 setting값
 
+URL_list = []
 URL = 'https://computer.knu.ac.kr/06_sub/02_sub.html' #여기에 다른학부 URL도 추가가능
+crawling_num = []
+computer_num = "bbs_num" #학부홈페이지마다 태그다름
 
 class depart_noti :
     def __init__(self,depart) :
         self.depart = depart
         self.noti = ''
         #self.send_thread_list = [] #각 알림을 쓰레드를 사용하고, 쓰레드들의 리스트
-
+        print(set_depart.departupdate_check)
         self.num_max = 0
         self.pre_max = 0
 
@@ -34,19 +38,13 @@ class depart_noti :
                 if(self.pre_max<int(number.text)):
                     self.pre_max=int(number.text)
                     break
-        #setting_depart 파일의 클래스
-            setting = setting_depart()
-
-        #self.pre_max = 2936 #테스트용
-
+        
+        self.pre_max = 2936 #테스트용
+        print(set_depart.departupdate_check)
         #1분마다 업데이트되는지 체크
-        while 1:
+        while set_depart.departupdate_check == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
-
-            if(update_check==0): #ON/OFF에서 OFF시 update_check = 0으로 할예정
-                break
-
-            time.sleep(60)
+            time.sleep(2)
             print('새로고침')
 
             req = requests.get(URL)
@@ -79,7 +77,7 @@ class depart_noti :
                 print(self.noti)
     
     def check_keyword(self,setting,title):
-        setting.load()
+        set_depart.load()
 
         if not setting.keyword:   #키워드리스트 설정안했을때
             self.noti = "변경사항있음 : [공지사항] "+str(self.num_max)+" : "+title
@@ -120,7 +118,7 @@ class depart_noti :
    
         
 
-#테스트용
-if __name__ == '__main__':
-    noti = depart_noti("컴퓨터학부")
-    noti.get_change() 
+##테스트용
+#if __name__ == '__main__':
+#    noti = depart_noti("컴퓨터학부")
+#    noti.get_change() 
