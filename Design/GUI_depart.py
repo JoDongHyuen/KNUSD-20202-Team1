@@ -1,6 +1,10 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+#from setting_depart import keyword
+#from setting_depart import depart
+
+keyword = []
 
 class depart_set(QWidget):
     def __init__(self):
@@ -16,28 +20,65 @@ class depart_set(QWidget):
         self.label1 = QLabel('알림 키워드 입력')
         font1 = self.label1.font()
         font1.setPointSize(40)
-        self.grid_layout.addWidget(self.label1, 0, 0)
+        self.grid_layout.addWidget(self.label1, 00, 0)
 
-        self.editkeyword = QLineEdit()
-        self.grid_layout.addWidget(self.editkeyword, 1, 0)
+        self.addkeyword = QLineEdit()
+        self.grid_layout.addWidget(self.addkeyword, 10, 0)
+
+        self.deletekeyword = QLineEdit()
+        self.grid_layout.addWidget(self.deletekeyword, 20, 0)
 
         self.btnadd = QPushButton('추가')
-        self.grid_layout.addWidget(self.btnadd, 1, 1)
+        self.grid_layout.addWidget(self.btnadd, 10, 10)
+        self.btnadd.clicked.connect(self.addaction)#버튼에 기능 연결
+
+        self.btndelete = QPushButton('삭제')
+        self.grid_layout.addWidget(self.btndelete, 20, 10)
+        self.btndelete.clicked.connect(self.deleteaction)#버튼에 기능 연결
 
         self.label2 = QLabel('학부 선택')
         font1 = self.label2.font()
         font1.setPointSize(40)
-        self.grid_layout.addWidget(self.label2, 2, 0)
+        self.grid_layout.addWidget(self.label2, 30, 0)
 
         self.depart_list = QComboBox()
         self.depart_list.addItem('컴퓨터학부')
         self.depart_list.addItem('전자공학부')
         self.depart_list.addItem('전기공학과')
-        self.grid_layout.addWidget(self.depart_list, 2, 1)
+        self.grid_layout.addWidget(self.depart_list, 30, 10)
+
+        self.label3 = QLabel('현재 설정된 키워드')#현재 설정된 키워드 정보 제목
+        font1 = self.label3.font()
+        font1.setPointSize(30)
+        self.grid_layout.addWidget(self.label3, 0, 10)
+
+        self.label4 = QLabel('')#현재 설정된 키워드 정보
+        font1 = self.label4.font()
+        font1.setPointSize(30)
+        self.grid_layout.addWidget(self.label4, 1, 10)
+        now_keyword = ",".join(keyword)
+        self.label4.setText(now_keyword)
 
         # 학부홈페이지 설정 창 세팅
         self.setWindowTitle('학부홈페이지 설정')
         self.resize(400,200)
+
+    #추가버튼 클릭시 동작
+    def addaction(self) :
+        keyword.append(self.addkeyword.text())
+        now_keyword = ",".join(keyword)
+        self.label4.setText(now_keyword)
+
+
+    #삭제버튼 클릭시 동작
+    def deleteaction(self) :
+        for k in keyword:
+            if(k == self.deletekeyword.text()) : #삭제할 키워드가 존재
+                keyword.remove(self.deletekeyword.text())
+        now_keyword = ",".join(keyword)
+        self.label4.setText(now_keyword)        
+        
+        
 
 class ALARM_Window(QWidget):
     def __init__(self):
