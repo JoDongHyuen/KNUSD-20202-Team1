@@ -148,7 +148,7 @@ class ALARM_Window(QWidget):
 
     def crawling_depart_state(self):#학부 on/off 변경
         if(set_depart.departupdate_check==1):#알람이 on이였으면
-            self.set_depart.departupdate_check=0#off 시키기
+            set_depart.departupdate_check=0#off 시키기
             print('크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(set_depart.departupdate_check==0):#알람이 off이였으면

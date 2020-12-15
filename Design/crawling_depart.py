@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 
 from setting_depart import *
 from GUI_depart import set_depart #학부 setting값
-
 URL_list = []
 URL = 'https://computer.knu.ac.kr/06_sub/02_sub.html' #여기에 다른학부 URL도 추가가능
 crawling_num = []
@@ -70,16 +69,16 @@ class depart_noti :
                             break
 
             if(self.num_max == self.pre_max+1):        #변경사항 있을때, 키워드 체크
-                self.check_keyword(setting,title)
+                self.check_keyword(title)
                 
             else:                           #변경사항 없을때, 아무것도 안함, 밑에 출력은 테스트용
                 self.noti = "변경사항없음 "+str(self.num_max)
                 print(self.noti)
     
-    def check_keyword(self,setting,title):
+    def check_keyword(self,title):
         set_depart.load()
 
-        if not setting.keyword:   #키워드리스트 설정안했을때
+        if not set_depart.keyword:   #키워드리스트 설정안했을때
             self.noti = "변경사항있음 : [공지사항] "+str(self.num_max)+" : "+title
             self.send_noti(self.depart,self.noti)
             #send_thread = threading.Thread(target = self.send_noti, args = (self.depart, self.noti))
@@ -92,7 +91,7 @@ class depart_noti :
         else:                      #키워드리스트 설정했을때
             include_keyword = 0
 
-            for keyword in setting.keyword :
+            for keyword in set_depart.keyword :
                 if keyword in title:    #키워드하나가 포함됨
                     include_keyword = 1
 
