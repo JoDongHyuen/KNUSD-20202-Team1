@@ -1,5 +1,6 @@
 # parser.py
 import requests
+import re
 from bs4 import BeautifulSoup as bs
 
 # id / pwd에 본인 lms 아이디 비번 입력
@@ -26,7 +27,7 @@ with requests.session() as s:
     
 
     #만약 정상적으로 로그인 되었다면 html.txt 파일에 본인 이름을 찾을 수 있음
-    score_file = open("html.txt", "w", encoding="utf8")
+    score_file = open("/Users/inwoo/Documents/vscode-workspace/html.txt", "w", encoding="utf8")
     print(html, file = score_file)
     score_file.close()
 
@@ -40,11 +41,9 @@ with requests.session() as s:
     notification_html = notification.text
     soup = bs(notification_html, 'html.parser')
 
-    score_file = open("notfi.txt","w",encoding="utf8")
+    score_file = open("/Users/inwoo/Documents/vscode-workspace/notfi.txt","w",encoding="utf8")
+    
+    notification_html = re.sub('<.+?>', '', notification_html, 0).strip()
+    print(notification_html)
     print(notification_html, file = score_file)
     score_file.close()
-
-
-
-
-
