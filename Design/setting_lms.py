@@ -9,7 +9,7 @@ class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있�
         self.ID = ''
         self.PW = ''
         self.secret_PW = ''
-        self.update_check = 0#현재 알람 on/off 상태 디폴트는 off인 0
+        self.lmsupdate_check = 0#lms의 현재 알람 on/off 상태 디폴트는 off인 0
 
     def load(self):  #파일에서 설정들 불러옴
        
