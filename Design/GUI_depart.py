@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from setting_depart import *
+from setting_lms import *
 
 class depart_set(QWidget):
 
@@ -93,6 +94,7 @@ class ALARM_Window(QWidget):
     def __init__(self):
         super().__init__()
         self.set_depart = setting_depart() #setting_depart 파일의 클래스
+        self.set_lms = setting_lms() #setting_depart 파일의 클래스
         self.dialog = QDialog()
         self.d_s = depart_set()
         self.initUI()
@@ -149,13 +151,13 @@ class ALARM_Window(QWidget):
             self.set_depart.departupdate_check=1#on 시키기
             print('크롤링을 시작합니다')#테스트용 나중에 지울것
 
-    def crawling_lms_state(self)::#LMS on/off 변경
-        if(self.set_depart.lmsupdate_check==1):#알람이 on이였으면
-            self.set_depart.lmsupdate_check=0#off 시키기
+    def crawling_lms_state(self):#LMS on/off 변경
+        if(self.set_lms.lmsupdate_check==1):#알람이 on이였으면
+            self.set_lms.lmsupdate_check=0#off 시키기
             print('크롤링을 종료합니다')#테스트용 나중에 지울것
 
-        elif(self.set_depart.lmsupdate_check==0):#알람이 off이였으면
-            self.set_depart.lmsupdate_check=1#on 시키기
+        elif(self.set_lms.lmsupdate_check==0):#알람이 off이였으면
+            self.set_lms.lmsupdate_check=1#on 시키기
             print('크롤링을 시작합니다')#테스트용 나중에 지울것
     
 
