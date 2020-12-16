@@ -4,7 +4,7 @@ depart_file = "depart.txt"  # 나중에 파일경로 설정해야할수도 있�
 keyword_file = "keyword.txt"
 
 class setting_depart: #GUI와 연결해야함
-
+    
     def __init__(self) :
         #self.depart_num
         self.depart = []

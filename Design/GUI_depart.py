@@ -77,11 +77,11 @@ class depart_set(QWidget):
             self.depart_electronic.toggle()
         self.depart_electronic.stateChanged.connect(self.select_electronic)#전자공학부 체크박스 누를때 실행
 
-        self.depart_electricity = QCheckBox('전기공학부', self)
+        self.depart_electricity = QCheckBox('전기공학과', self)
         self.depart_electricity.move(300,160)
-        if '전기공학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
+        if '전기공학과' in set_depart[0].depart:#현재 학부 선택 상태 반영
             self.depart_electricity.toggle()
-        self.depart_electricity.stateChanged.connect(self.select_electricity)#전기공학부 체크박스 누를때 실행
+        self.depart_electricity.stateChanged.connect(self.select_electricity)#전기공학과 체크박스 누를때 실행
 
         self.label3 = QLabel('현재 설정된 키워드')#현재 설정된 키워드 정보 제목
         font1 = self.label3.font()
@@ -140,13 +140,13 @@ class depart_set(QWidget):
             return
         set_depart[0].append_depart("전자공학부")
 
-    #전기공학부 체크박스 상태변화시 동작
+    #전기공학과 체크박스 상태변화시 동작
     def select_electricity(self):
         global set_depart
-        if '전기공학부' in set_depart[0].depart:#이미 있는 학부면 삭제
-            set_depart[0].delete_depart("전기공학부")
+        if '전기공학과' in set_depart[0].depart:#이미 있는 학부면 삭제
+            set_depart[0].delete_depart("전기공학과")
             return
-        set_depart[0].append_depart("전기공학부")
+        set_depart[0].append_depart("전기공학과")
 
 class ALARM_Window(QWidget):
     
@@ -215,7 +215,8 @@ class ALARM_Window(QWidget):
 
             print('크롤링을 시작합니다')#테스트용 나중에 지울것
             set_depart[0].load()
-            for d in set_depart[0].depart:             
+            print(set_depart[0].depart)
+            for d in set_depart[0].depart:                             
                 crawl_thread_depart = crawling_depart_thread(self,d)
                 crawl_thread_depart.start()
                 

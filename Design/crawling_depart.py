@@ -6,11 +6,11 @@ history_file = "history_depart.txt" #알림 내역들
 
 URL_dic = {'컴퓨터학부' : 'https://computer.knu.ac.kr/06_sub/02_sub.html',
            '전자공학부' : 'https://see.knu.ac.kr/content/board/notice.html',
-           '전기공학과' : 'https://electric.knu.ac.kr/'
+           '전기공학과' : 'https://electric.knu.ac.kr/HOME/electric/sub.htm?nav_code=ele1465563397'
     }
 tagnum_dic = {'컴퓨터학부' : "td.bbs_num", #학부홈페이지마다 태그다름
               '전자공학부' : "td.row", #전자공학부는 태그형식이 다름
-              '전기공학과' : 'td.rst'
+              '전기공학과' : "td.fst"
               
     }
 
@@ -29,7 +29,7 @@ class depart_noti :
         req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
-
+        
         update_check=1
         num_txt = ''
         title = ''
@@ -42,20 +42,23 @@ class depart_noti :
         #1분마다 업데이트되는지 체크
         while departupdate_check[0] == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
-            time.sleep(2) #60초
+            time.sleep(3) #60초
 
             req = requests.get(URL_dic[self.depart])
+            
             html = req.text
             soup = BeautifulSoup(html,'html.parser')
 
             notis = soup.select('tr' ) #tr태그 목록들
 
             for noti in notis:
+                
                 num_html =noti.select(tagnum_dic[self.depart]) #tr태그에서 공지사항 번호
                 for n in num_html:
-                    num_txt = n.text
-                if(num_txt == ''):
+                    num_txt = n.text 
+                if(len(num_txt)==0 or num_txt == ''  or num_txt == '공지' ):
                     continue
+                
                 self.num_max = int(num_txt)
 
                 title_html= noti.select('td>a')   #tr태그에서 공지사항 제목
