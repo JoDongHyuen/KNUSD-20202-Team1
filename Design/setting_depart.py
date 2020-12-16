@@ -36,7 +36,7 @@ class setting_depart: #GUI와 연결해야함
 
         self.keyword.append(keyword)
         f2 = open(keyword_file, 'a')
-        f2.write(keyword)
+        f2.write(keyword+'\n')
         f2.close()
 
     def delete_keyword(self,keyword): #키워드 삭제
@@ -55,7 +55,7 @@ class setting_depart: #GUI와 연결해야함
 
         self.depart.append(depart)
         f1 = open(depart_file, 'a')
-        f1.write(depart)
+        f1.write(depart+'\n')
         f1.close()
 
     def delete_depart(self,depart): #학부 삭제

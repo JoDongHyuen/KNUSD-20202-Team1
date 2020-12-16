@@ -4,10 +4,16 @@ from bs4 import BeautifulSoup
 
 history_file = "history_depart.txt" #알림 내역들
 
-URL_list = []
-URL = 'https://computer.knu.ac.kr/06_sub/02_sub.html' #여기에 다른학부 URL도 추가가능
-crawling_num = []
-computer_num = "bbs_num" #학부홈페이지마다 태그다름
+URL_dic = {'컴퓨터학부' : 'https://computer.knu.ac.kr/06_sub/02_sub.html',
+           '전자공학부' : 'https://see.knu.ac.kr/content/board/notice.html',
+           '전기공학과' : 'https://electric.knu.ac.kr/'
+    }
+tagnum_dic = {'컴퓨터학부' : "td.bbs_num", #학부홈페이지마다 태그다름
+              '전자공학부' : "td.row", #전자공학부는 태그형식이 다름
+              '전기공학과' : 'td.rst'
+              
+    }
+
 
 class depart_noti :
     def __init__(self,depart) :
@@ -20,7 +26,7 @@ class depart_noti :
         self.toaster = ToastNotifier()
 
     def get_change(self,departupdate_check,set_depart): #학부 setting값을 인자로 받음
-        req = requests.get(URL)
+        req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
 
@@ -29,7 +35,8 @@ class depart_noti :
         title = ''
 
         #가장 최근의 공지사항 번호 받아오기
-        numbers = soup.find_all(class_="bbs_num")
+        #numbers = soup.find_all(class_="bbs_num")
+        numbers = soup.select(tagnum_dic[self.depart])
         self.load_recent(numbers)
 
         #1분마다 업데이트되는지 체크
@@ -37,14 +44,14 @@ class depart_noti :
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
             time.sleep(2) #60초
 
-            req = requests.get(URL)
+            req = requests.get(URL_dic[self.depart])
             html = req.text
             soup = BeautifulSoup(html,'html.parser')
 
             notis = soup.select('tr' ) #tr태그 목록들
 
             for noti in notis:
-                num_html =noti.select('td.bbs_num') #tr태그에서 공지사항 번호
+                num_html =noti.select(tagnum_dic[self.depart]) #tr태그에서 공지사항 번호
                 for n in num_html:
                     num_txt = n.text
                 if(num_txt == ''):
@@ -63,7 +70,7 @@ class depart_noti :
                 self.check_keyword(title,set_depart[0])
                 
             else:                           #변경사항 없을때, 아무것도 안함, 밑에 출력은 테스트용
-                print("변경사항없음")
+                print("[변경사항없음]"+'['+self.depart+']')
     
     def check_keyword(self,title,set_depart):
         set_depart.load()
@@ -78,7 +85,7 @@ class depart_noti :
             #self.send_thread_list.append(send_thread)
             #send_thread.start()
 
-            print(self.noti)
+            print("[변경사항있고, 키워드설정x]"+self.noti)
             self.store_history(self.noti)
 
         else:                      #키워드리스트 설정했을때
@@ -93,12 +100,12 @@ class depart_noti :
                     #self.send_thread_list.append(send_thread)
                     #send_thread.start()
 
-                    print(self.noti)
+                    print("[변경사항있고, 키워드포함o]"+self.noti)
                     self.store_history(self.noti)
                     break
 
             if include_keyword == 0: #테스트 전용, 원래는 키워드 포함되어있지않으면, 아무것도안함
-                print("변경사항있지만, 키워드포함 x : [공지사항]",self.num_max,":",title) 
+                print("[변경사항있지만, 키워드포함 x]"+str(self.num_max)+"["+self.depart+"]"+":",title) 
 
         self.pre_max = self.num_max
 
