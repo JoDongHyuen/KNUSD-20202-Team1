@@ -67,8 +67,9 @@ class depart_noti :
     
     def check_keyword(self,title,set_depart):
         set_depart.load()
-        title = title.replace('\t', ' ')
-        title = title.replace('\n', ' ')
+        title = title.replace('\t', '')
+        title = title.replace('\r', '')
+        title = title.replace('\n', '')
 
         if not set_depart.keyword:   #키워드리스트 설정안했을때
             self.noti = str(self.num_max)+"["+self.depart+"] "+" : "+title
