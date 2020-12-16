@@ -64,7 +64,8 @@ class depart_set(QWidget):
 
         self.depart_com = QCheckBox('컴퓨터학부', self)
         self.depart_com.move(100,160)
-        if not len(set_depart[0].depart):
+        if len(set_depart[0].depart) == 0 :
+            print(len(set_depart[0].depart))
             self.depart_com.toggle()
         if '컴퓨터학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
             self.depart_com.toggle()
@@ -73,13 +74,13 @@ class depart_set(QWidget):
         self.depart_electronic = QCheckBox('전자공학부', self)
         self.depart_electronic.move(200,160)
         if '전자공학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
-            self.depart_com.toggle()
+            self.depart_electronic.toggle()
         self.depart_electronic.stateChanged.connect(self.select_electronic)#전자공학부 체크박스 누를때 실행
 
         self.depart_electricity = QCheckBox('전기공학부', self)
         self.depart_electricity.move(300,160)
         if '전기공학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
-            self.depart_com.toggle()
+            self.depart_electricity.toggle()
         self.depart_electricity.stateChanged.connect(self.select_electricity)#전기공학부 체크박스 누를때 실행
 
         self.label3 = QLabel('현재 설정된 키워드')#현재 설정된 키워드 정보 제목
@@ -100,7 +101,7 @@ class depart_set(QWidget):
     #추가버튼 클릭시 동작
     def add_action(self) :
         global set_depart
-        print(set_depart[0].keyword)
+
         for k in set_depart[0].keyword:
             if(k == self.addkeyword.text() and len(self.addkeyword.text()) < 1) : #입력한 키워드가 이미 존재할 경우
                 return
@@ -110,7 +111,7 @@ class depart_set(QWidget):
     #삭제버튼 클릭시 동작
     def delete_action(self) :
         global set_depart
-        print(set_depart[0].keyword)
+
         for k in set_depart[0].keyword:
             if(k == self.deletekeyword.text()) : #삭제할 키워드가 존재
                 set_depart[0].delete_keyword(self.deletekeyword.text())#설정의 keyword에 키워드값 삭제
