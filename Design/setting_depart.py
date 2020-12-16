@@ -73,7 +73,7 @@ class setting_depart: #GUI와 연결해야함
                 self.depart.remove(depart)
                 break
 
-        f1 = open(keyword_file, 'w')
+        f1 = open(depart_file, 'w')
         for d in self.depart:
             f1.write(d+'\n')
         f1.close()
