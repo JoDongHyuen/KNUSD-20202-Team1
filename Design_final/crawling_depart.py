@@ -114,7 +114,12 @@ class depart_noti :
     def send_noti(self,depart,noti): #윈도우10 알림창에 공지사항 알림 보냄
         title = depart + ' 홈페이지'
        
-        self.toaster.show_toast(title,noti,icon_path = None, duration =3600, threaded = True) #3600초 알림지속
+        try:
+            self.toaster.show_toast(title,noti,icon_path = None, duration =None, threaded = False) 
+        except :
+            pass
+
+        
 
     def store_history(self,noti): #알림내역 저장
         f1 = open(history_file, 'a')
