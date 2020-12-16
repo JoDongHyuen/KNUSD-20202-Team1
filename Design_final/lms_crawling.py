@@ -1,5 +1,6 @@
 # parser.py
 import requests,re,time, shutil
+import os
 from bs4 import BeautifulSoup as bs
 from win10toast import ToastNotifier
 
@@ -71,7 +72,7 @@ def lms_notify(lmsupdate_check,set_lms):
 def compare_file(toaster): #파일 비교하는 부분
 
     file_checker = 1 #f2가 정상적으로 열리면 1, 비정상이면 0의 값을 가짐
-
+    
     new = open("new_lms.txt", "r", encoding="utf8")
     #처음에 사용하면 prev.txt가 생성안되어서 try, except로 new.txt를
     #prev.txt로 복사하도록 처리하였음
@@ -88,9 +89,12 @@ def compare_file(toaster): #파일 비교하는 부분
 
         for i in range(0,3):
             check = (new_lines[i] == prev_lines[i])
+            
             if check == False:
                 print("[LMS 변동사항 확인]")
-                send_noti(new_lines[i],toaster)
+                alarm_string = new_lines[0] + new_lines[1] + new_lines[2]
+                send_noti(alarm_string,toaster)
+                shutil.copy("new_lms.txt","prev_lms.txt")
                 break
 
         prev.close()
@@ -100,5 +104,8 @@ def compare_file(toaster): #파일 비교하는 부분
 def send_noti(noti,toaster): #윈도우10 알림창에 공지사항 알림 보냄
 
     title = 'LMS 알림'
-       
-    toaster.show_toast(title,noti,icon_path = None, duration =3600, threaded = True) #3600초 알림지속
+
+    try:   
+        toaster.show_toast(title,noti,icon_path = None, duration =None, threaded=False) #3600초 알림지속
+    except:
+        pass
