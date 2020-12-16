@@ -277,7 +277,7 @@ class ALARM_Window(QWidget):
     def crawling_depart_state(self):#학부 on/off 변경
         global departupdate_check
         global set_depart
-
+        
         if(departupdate_check[0]==1):#알람이 on이였으면
             departupdate_check[0]=0#off 시키기
             print('학부 크롤링을 종료합니다')#테스트용 나중에 지울것
@@ -304,6 +304,8 @@ class ALARM_Window(QWidget):
         elif(lmsupdate_check[0]==0):#알람이 off이였으면
             if (LOGIN_INFO['usr_id'] == '' or LOGIN_INFO['usr_pwd'] == ''):
                 QMessageBox.question(self,'Message','로그인을 먼저해주세요',QMessageBox.Ok)
+                self.button1.setCheckable(False)
+                self.button1.setCheckable(True)
             else:
                 lmsupdate_check[0]=1#on 시키기
 
