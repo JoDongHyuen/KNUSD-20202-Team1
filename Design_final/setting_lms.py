@@ -14,7 +14,11 @@ class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있�
         if os.path.isfile(login_file):
             f1 = open(login_file, 'r')
             self.ID = f1.readline()
+            self.ID = self.ID.replace('\n', '')
+
             self.secret_PW = f1.readline()
+            self.secret_PW = self.secret_PW.replace('\n', '')
+
             self.decode_pw() #복호화
             f1.close()
 
@@ -27,9 +31,9 @@ class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있�
         self.ID = ID
         self.PW = PW
         f1 = open(login_file, 'w')
-        f1.write(ID)
+        f1.write(self.ID+'\n')
         self.encode_pw() #암호화
-        f1.write(self.secret_PW)
+        f1.write(self.secret_PW+'\n')
         f1.close()
 
 

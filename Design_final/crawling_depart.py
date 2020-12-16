@@ -29,8 +29,7 @@ class depart_noti :
         req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
-        
-        update_check=1
+
         num_txt = ''
         title = ''
 

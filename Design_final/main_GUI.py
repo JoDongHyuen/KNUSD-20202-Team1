@@ -1,16 +1,12 @@
 
-import sys, threading, requests
+import sys, threading, requests, json, re
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from setting_depart import *
 from setting_lms import *
 from crawling_depart import *
-
-LOGIN_INFO = {
-    'usr_id': '',
-    'usr_pwd': ''
-}
+from lms_crawling import *
 
 #call by reference의 형태로 변수를 넘겨주기 위해, 리스트형태
 
@@ -28,6 +24,12 @@ lmsupdate_check.append(0)
 set_lms.append(set_l)
 departupdate_check.append(0)
 set_depart.append(set_d)
+
+# id / pwd에 본인 lms 아이디 비번 입력
+LOGIN_INFO = {
+    'usr_id': '',
+    'usr_pwd': ''
+}
 
 class depart_set(QWidget):
 
@@ -155,6 +157,9 @@ class depart_set(QWidget):
 
 class lms_login(QWidget):
     def __init__(self):
+        self.id = ''
+        self.pw = ''
+
         super().__init__()
         grid_layout = QGridLayout()
         self.setLayout(grid_layout)
@@ -177,11 +182,22 @@ class lms_login(QWidget):
         self.setWindowTitle('LMS Login')
         self.setGeometry(300,300,300,100)
 
+        #자동로그인 먼저시도
+        if(len(set_lms[0].ID) > 0 and len(set_lms[0].PW ) > 0) :
+            LOGIN_INFO['usr_id'] = set_lms[0].ID
+            LOGIN_INFO['usr_pwd'] = set_lms[0].PW 
+            self.try_login(2)
+
     def pushButtonClicked(self):
         self.id = self.text1.text()
-        self.pwd = self.text2.text()
+        self.pw = self.text2.text()
+
         LOGIN_INFO['usr_id'] = self.id
-        LOGIN_INFO['usr_pwd'] = self.pwd
+        LOGIN_INFO['usr_pwd'] = self.pw
+
+        self.try_login(1)
+
+    def try_login(self,mode):  #mode = 1 수동, mode=2 자동  
         with requests.session() as s:
         
             login_check = 0
@@ -191,18 +207,26 @@ class lms_login(QWidget):
             login = login_req.text
             login = json.loads(login)
             if(login['isError'] == False):
+                if mode ==1:
+                    QMessageBox.question(self,'Message','로그인 성공',QMessageBox.Ok)
+                    set_lms[0].set_login(self.id,self.pw) #로그인성공하면 ID/PW저장
+                if mode == 2:
+                    QMessageBox.question(self,'Message','자동 로그인 성공',QMessageBox.Ok)
                 self.close()
+
             else:
                 QMessageBox.question(self,'Message','ID/PW를 확인하십시오',QMessageBox.Ok)
+
 
 class ALARM_Window(QWidget):
     
 
     def __init__(self):
         super().__init__()
-        
+
         self.dialog = QDialog()
         self.d_s = depart_set()
+        self.lms_login = lms_login()
 
         self.initUI()
 
@@ -230,6 +254,7 @@ class ALARM_Window(QWidget):
         self.button1.toggled.connect(self.crawling_lms_state)#lms on/off버튼에 기능 연결
 
         self.button2 = QPushButton('로그인')
+        self.button2.clicked.connect(self.pushButtontoLogin)
         grid_layout.addWidget(self.button2, 2, 0)
 
         self.button3 = QPushButton('On/Off')
@@ -255,69 +280,37 @@ class ALARM_Window(QWidget):
 
         if(departupdate_check[0]==1):#알람이 on이였으면
             departupdate_check[0]=0#off 시키기
-            print('크롤링을 종료합니다')#테스트용 나중에 지울것
+            print('학부 크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(departupdate_check[0]==0):#알람이 off이였으면
             departupdate_check[0]=1#on 시키기
 
-            print('크롤링을 시작합니다')#테스트용 나중에 지울것
+            print('학부 크롤링을 시작합니다')#테스트용 나중에 지울것
             set_depart[0].load()
-            print(set_depart[0].depart)
+            #print(set_depart[0].depart)
             for d in set_depart[0].depart:                             
                 crawl_thread_depart = crawling_depart_thread(self,d)
                 crawl_thread_depart.start()
                 
 
-    def crawling_lms_state(self):#LMS on/off 변경 - 미구현
+    def crawling_lms_state(self):#LMS on/off 변경
         global lmsupdate_check
+        global set_lms
 
         if(lmsupdate_check[0]==1):#알람이 on이였으면
             lmsupdate_check[0]=0#off 시키기
-            print('크롤링을 종료합니다')#테스트용 나중에 지울것
+            print('lms 크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(lmsupdate_check[0]==0):#알람이 off이였으면
             lmsupdate_check[0]=1#on 시키기
-            print('크롤링을 시작합니다')#테스트용 나중에 지울것
+
+            print('lms 크롤링을 시작합니다')#테스트용 나중에 지울것
+            set_lms[0].load()
+            crawl_thread_lms = crawling_lms_thread(self)
+            crawl_thread_lms.start()
 
     def pushButtontoLogin(self):
         self.lms_login.show()
-
-    def lms_notify(self):
-        with requests.session() as s:
-        
-            login_check = 0
-
-            #print(LOGIN_INFO)
-
-            #로그인에 실패하면 login에 isError 가 True로 나타나서 이걸 이용해 exception 처리 예정
-            login_req = s.post('https://lms.knu.ac.kr/ilos/lo/login.acl', data=LOGIN_INFO)
-            login = login_req.text
-            #print(login)
-
-            #로그인 후 알림 창을 스크래핑하는 부분
-            notification = s.get('https://lms.knu.ac.kr/ilos/mp/notification_list.acl')
-            noti = bs(notification.content, 'html.parser')
-            for i,j,k in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text"), noti.find_all(class_="notification_day")):
-                i = re.sub('<.+?>', '', str(i), 0).strip()
-                i = i.replace('\n', '')
-                i = i.replace('\t', '')
-                print(i)
-
-                j = re.sub('<.+?>', '', str(j), 0).strip()
-                j = j.replace('\n', '')
-                j = j.replace('\t', '')
-                j = j.replace('\r', '')
-                title = j.split(' ')
-                new = ' '.join(title[1:])
-                new = new.lstrip()
-                tit = title[0]
-                print(tit+'\n'+new)
-
-                k = re.sub('<.+?>', '', str(k), 0).strip()
-                k = k.replace('\n', '')
-                k = k.replace('\t', '')
-                print(k)
-                print('\n')
     
 class crawling_depart_thread(QThread):
     def __init__(self,parent,depart):
@@ -327,6 +320,13 @@ class crawling_depart_thread(QThread):
     def run(self):
          depart_crawl = depart_noti(self.depart)
          depart_crawl.get_change(departupdate_check,set_depart)
+
+class crawling_lms_thread(QThread):
+    def __init__(self,parent):
+        super().__init__(parent)
+
+    def run(self):
+        lms_notify(lmsupdate_check,set_lms)
 
 if __name__ == '__main__':
 
