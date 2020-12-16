@@ -1,7 +1,6 @@
 import os
 
-
-login_file = "lms.txt" # 나중에 파일경로 설정해야할수도 있다
+login_file = "login_lms.txt" # 나중에 파일경로 설정해야할수도 있다
 
 class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
 
@@ -9,7 +8,6 @@ class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있�
         self.ID = ''
         self.PW = ''
         self.secret_PW = ''
-        self.lmsupdate_check = 0#lms의 현재 알람 on/off 상태 디폴트는 off인 0
 
     def load(self):  #파일에서 설정들 불러옴
        
