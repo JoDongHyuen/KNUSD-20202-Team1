@@ -302,12 +302,15 @@ class ALARM_Window(QWidget):
             print('lms 크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(lmsupdate_check[0]==0):#알람이 off이였으면
-            lmsupdate_check[0]=1#on 시키기
+            if (LOGIN_INFO['usr_id'] == '' or LOGIN_INFO['usr_pwd'] == ''):
+                QMessageBox.question(self,'Message','로그인을 먼저해주세요',QMessageBox.Ok)
+            else:
+                lmsupdate_check[0]=1#on 시키기
 
-            print('lms 크롤링을 시작합니다')#테스트용 나중에 지울것
-            set_lms[0].load()
-            crawl_thread_lms = crawling_lms_thread(self)
-            crawl_thread_lms.start()
+                print('lms 크롤링을 시작합니다')#테스트용 나중에 지울것
+                set_lms[0].load()
+                crawl_thread_lms = crawling_lms_thread(self)
+                crawl_thread_lms.start()
 
     def pushButtontoLogin(self):
         self.lms_login.show()
