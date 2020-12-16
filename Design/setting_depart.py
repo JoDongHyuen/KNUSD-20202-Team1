@@ -20,7 +20,7 @@ class setting_depart: #GUI와 연결해야함
 
         else: #파일이 존재하지않으면, 만들어서 디폴트값을 넣는다
             f1 = open(depart_file, 'w')
-            f1.write('컴퓨터학부')
+            f1.write('컴퓨터학부'+'\n')
             f1.close()
 
         if os.path.isfile(keyword_file): #키워드 리스트
