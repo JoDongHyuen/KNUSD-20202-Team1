@@ -130,7 +130,6 @@ class depart_set(QWidget):
             set_depart[0].delete_depart("컴퓨터학부")
             return     
         set_depart[0].append_depart("컴퓨터학부")#아니면 학부 추가
-        #set_depart[0].append_depart(text) #설정의 depart에 학부값 넣기
     
     #전자공학부 체크박스 상태변화시 동작
     def select_electronic(self):
