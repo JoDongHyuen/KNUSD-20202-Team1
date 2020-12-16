@@ -2,7 +2,6 @@
 import requests
 import re
 from bs4 import BeautifulSoup as bs
-from gui_lms import LOGIN_INFO
 
 # id / pwd에 본인 lms 아이디 비번 입력
 LOGIN_INFO = {
