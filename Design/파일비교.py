@@ -63,10 +63,10 @@ if file_checker == 1:
     prev_lines = prev.readlines()
 
     for i in range(0,3):
-        check = (f1_lines[i] == f2_lines[i])
+        check = (new_lines[i] == prev_lines[i])
         if check == False:
             print("변동사항 확인")
             break
 
-    f2.close()
-f1.close()
+    prev.close()
+new.close()
