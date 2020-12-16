@@ -102,7 +102,7 @@ class depart_set(QWidget):
         global set_depart
 
         for k in set_depart[0].keyword:
-            if(k == self.addkeyword.text() and len(self.addkeyword.text()) < 2) : #입력한 키워드가 이미 존재할 경우
+            if(k == self.addkeyword.text() and len(self.addkeyword.text()) < 1) : #입력한 키워드가 이미 존재할 경우
                 return
         set_depart[0].append_keyword(self.addkeyword.text())#설정의 keyword에 키워드값 넣기
         self.print_keyword() 
