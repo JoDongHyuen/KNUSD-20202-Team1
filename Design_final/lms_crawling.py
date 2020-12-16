@@ -23,7 +23,7 @@ def lms_notify(lmsupdate_check,set_lms):
     #1분마다 업데이트되는지 체크
     while lmsupdate_check[0] == 1:
         time.sleep(3) #60초
-
+        notfi_file = open("new_lms.txt","w",encoding="utf8")
         with requests.session() as s:
             login_check = 0
 
@@ -32,14 +32,14 @@ def lms_notify(lmsupdate_check,set_lms):
             #로그인에 실패하면 login에 isError 가 True로 나타나서 이걸 이용해 exception 처리 예정
             login_req = s.post('https://lms.knu.ac.kr/ilos/lo/login.acl', data=LOGIN_INFO)
             login = login_req.text
-            #print(login)
 
             #로그인 후 알림 창을 스크래핑하는 부분
             notification = s.get('https://lms.knu.ac.kr/ilos/mp/notification_list.acl')
             noti = bs(notification.content, 'html.parser')
-            notfi_file = open(new_file,"w",encoding="utf8")
+            
+        
 
-            for i,j,k in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text"), noti.find_all(class_="notification_day")):
+            for i,j in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text")):
 
                 i = re.sub('<.+?>', '', str(i), 0).strip()
                 i = i.replace('\n', '')
@@ -58,27 +58,27 @@ def lms_notify(lmsupdate_check,set_lms):
                 #print(tit+'\n'+new)
                 print(tit+'\n'+new+'\n', file=notfi_file)
                 
-                k = re.sub('<.+?>', '', str(k), 0).strip()
-                k = k.replace('\n', '')
-                k = k.replace('\t', '')
-                #print(k+'\n')
-                print(k+'\n',file = notfi_file)
+                # k = re.sub('<.+?>', '', str(k), 0).strip()
+                # k = k.replace('\n', '')
+                # k = k.replace('\t', '')
+                # #print(k+'\n')
+                # print(k+'\n',file = notfi_file)
+             
+        notfi_file.close()
 
-                notfi_file.close()
-
-                compare_file(toaster)
+        compare_file(toaster)
 
 def compare_file(toaster): #파일 비교하는 부분
 
     file_checker = 1 #f2가 정상적으로 열리면 1, 비정상이면 0의 값을 가짐
 
-    new = open(new_file, "r", encoding="utf8")
+    new = open("new_lms.txt", "r", encoding="utf8")
     #처음에 사용하면 prev.txt가 생성안되어서 try, except로 new.txt를
     #prev.txt로 복사하도록 처리하였음
     try:
-        prev = open(prev_file, "r", encoding="utf8")
+        prev = open("prev_lms.txt", "r", encoding="utf8")
     except:
-        shutil.copy(new_file,prev_file)
+        shutil.copy("new_lms.txt","prev_lms.txt")
         file_checker = 0
         pass
 
