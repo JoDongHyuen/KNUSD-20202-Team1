@@ -31,15 +31,11 @@ class depart_noti :
         #가장 최근의 공지사항 번호 받아오기
         numbers = soup.find_all(class_="bbs_num")
         self.load_recent(numbers)
-        
-        
-        self.pre_max = 2935 #테스트용
 
         #1분마다 업데이트되는지 체크
         while departupdate_check[0] == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
             time.sleep(2) #60초
-            print('새로고침')
 
             req = requests.get(URL)
             html = req.text
@@ -71,6 +67,8 @@ class depart_noti :
     
     def check_keyword(self,title,set_depart):
         set_depart.load()
+        title = title.replace('\t', ' ')
+        title = title.replace('\n', ' ')
 
         if not set_depart.keyword:   #키워드리스트 설정안했을때
             self.noti = str(self.num_max)+"["+self.depart+"] "+" : "+title
@@ -105,25 +103,23 @@ class depart_noti :
         self.pre_max = self.num_max
 
     def send_noti(self,depart,noti): #윈도우10 알림창에 공지사항 알림 보냄
-        
         title = depart + ' 홈페이지'
-        noti = noti.replace('\t', ' ')
-        noti = noti.replace('\r\n', ' ')
-
+       
         self.toaster.show_toast(title,noti,icon_path = None, duration =3600, threaded = True) #3600초 알림지속
 
     def store_history(self,noti): #알림내역 저장
         f1 = open(history_file, 'a')
         f1.write(noti)
+        f1.write('\n')
         f1.close()
 
     def load_recent(self,numbers):
-         if os.path.isfile(history_file): #제일 최근 알림내역에서 공지사항 번호 추출
+         if os.path.isfile(history_file) and os.stat(history_file).st_size>0: #제일 최근 알림내역에서 공지사항 번호 추출
             f1 = open(history_file, 'r')
             notis = f1.readlines()
             f1.close()
             last_noti = notis[len(notis)-1]
-            pre_max = int(last_noti[0]+last_noti[1]+last_noti[2]+last_noti[3])
+            self.pre_max = int(last_noti[0]+last_noti[1]+last_noti[2]+last_noti[3])
 
          else: #파일이 존재하지않으면, 만들어서 디폴트값을 넣는다
             f1 = open(history_file, 'w')
