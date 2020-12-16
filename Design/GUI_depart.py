@@ -64,6 +64,8 @@ class depart_set(QWidget):
 
         self.depart_com = QCheckBox('컴퓨터학부', self)
         self.depart_com.move(100,160)
+        if not len(set_depart[0].depart):
+            self.depart_com.toggle()
         if '컴퓨터학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
             self.depart_com.toggle()
         self.depart_com.stateChanged.connect(self.select_computer)#컴퓨터학부 체크박스 누를때 실행
@@ -123,10 +125,10 @@ class depart_set(QWidget):
 
     #컴퓨터학부 체크박스 상태변화시 동작
     def select_computer(self):
-        global set_depart
+        global set_depart           
         if '컴퓨터학부' in set_depart[0].depart:#이미 있는 학부면 삭제
             set_depart[0].delete_depart("컴퓨터학부")
-            return 0      
+            return     
         set_depart[0].append_depart("컴퓨터학부")#아니면 학부 추가
         #set_depart[0].append_depart(text) #설정의 depart에 학부값 넣기
     
