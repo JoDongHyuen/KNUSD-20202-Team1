@@ -6,8 +6,8 @@ from gui_lms import LOGIN_INFO
 
 # id / pwd에 본인 lms 아이디 비번 입력
 LOGIN_INFO = {
-    'usr_id': 'korean5078',
-    'usr_pwd': 'skadlsdn5078*'
+    'usr_id': '',
+    'usr_pwd': ''
 }
 class lms_notify:
     with requests.session() as s:
