@@ -16,6 +16,10 @@ class setting_depart: #GUI와 연결해야함
         if os.path.isfile(depart_file): #학부리스트
             f1 = open(depart_file, 'r')
             self.depart = f1.readlines()
+
+            for i in range(0,len(self.depart)):
+                self.depart[i] = self.depart[i].replace('\n', '')
+
             f1.close()
 
         else: #파일이 존재하지않으면, 만들어서 디폴트값을 넣는다
@@ -26,6 +30,10 @@ class setting_depart: #GUI와 연결해야함
         if os.path.isfile(keyword_file): #키워드 리스트
             f2 = open(keyword_file, 'r')
             self.keyword = f2.readlines()
+
+            for i in range(0,len(self.keyword)):
+                self.keyword[i] = self.keyword[i].replace('\n', '')
+
             f2.close()
 
         else: #키워드 리스트는 디폴트값이 없다
@@ -33,11 +41,11 @@ class setting_depart: #GUI와 연결해야함
             f2.close()
 
     def append_keyword(self,keyword): #키워드 추가
-
-        self.keyword.append(keyword)
-        f2 = open(keyword_file, 'a')
-        f2.write(keyword+'\n')
-        f2.close()
+        if(len(keyword) > 0):
+            self.keyword.append(keyword)
+            f2 = open(keyword_file, 'a')
+            f2.write(keyword+'\n')
+            f2.close()
 
     def delete_keyword(self,keyword): #키워드 삭제
 

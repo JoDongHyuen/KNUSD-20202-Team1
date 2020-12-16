@@ -100,7 +100,7 @@ class depart_set(QWidget):
     #추가버튼 클릭시 동작
     def add_action(self) :
         global set_depart
-
+        print(set_depart[0].keyword)
         for k in set_depart[0].keyword:
             if(k == self.addkeyword.text() and len(self.addkeyword.text()) < 1) : #입력한 키워드가 이미 존재할 경우
                 return
@@ -110,7 +110,7 @@ class depart_set(QWidget):
     #삭제버튼 클릭시 동작
     def delete_action(self) :
         global set_depart
-
+        print(set_depart[0].keyword)
         for k in set_depart[0].keyword:
             if(k == self.deletekeyword.text()) : #삭제할 키워드가 존재
                 set_depart[0].delete_keyword(self.deletekeyword.text())#설정의 keyword에 키워드값 삭제
