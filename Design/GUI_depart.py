@@ -62,12 +62,23 @@ class depart_set(QWidget):
         font1.setPointSize(40)
         self.grid_layout.addWidget(self.label2, 30, 0)
 
-        self.depart_list = QComboBox()
-        self.depart_list.addItem('컴퓨터학부')
-        self.depart_list.addItem('전자공학부')
-        self.depart_list.addItem('전기공학과')
-        self.grid_layout.addWidget(self.depart_list, 30, 10)
-        self.depart_list.activated[str].connect(self.select_depart) #학부선택에 기능 연결
+        self.depart_com = QCheckBox('컴퓨터학부', self)
+        self.depart_com.move(100,160)
+        if '컴퓨터학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
+            self.depart_com.toggle()
+        self.depart_com.stateChanged.connect(self.select_computer)#컴퓨터학부 체크박스 누를때 실행
+
+        self.depart_electronic = QCheckBox('전자공학부', self)
+        self.depart_electronic.move(200,160)
+        if '전자공학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
+            self.depart_com.toggle()
+        self.depart_electronic.stateChanged.connect(self.select_electronic)#전자공학부 체크박스 누를때 실행
+
+        self.depart_electricity = QCheckBox('전기공학부', self)
+        self.depart_electricity.move(300,160)
+        if '전기공학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
+            self.depart_com.toggle()
+        self.depart_electricity.stateChanged.connect(self.select_electricity)#전기공학부 체크박스 누를때 실행
 
         self.label3 = QLabel('현재 설정된 키워드')#현재 설정된 키워드 정보 제목
         font1 = self.label3.font()
@@ -110,12 +121,30 @@ class depart_set(QWidget):
         now_keyword = ",".join(set_depart[0].keyword)
         self.label4.setText(now_keyword)
 
-    #학부선택시 동작
-    def select_depart(self, text):
+    #컴퓨터학부 체크박스 상태변화시 동작
+    def select_computer(self):
         global set_depart
-
-        set_depart[0].depart = text
+        if '컴퓨터학부' in set_depart[0].depart:#이미 있는 학부면 삭제
+            set_depart[0].delete_depart("컴퓨터학부")
+            return 0      
+        set_depart[0].append_depart("컴퓨터학부")#아니면 학부 추가
         #set_depart[0].append_depart(text) #설정의 depart에 학부값 넣기
+    
+    #전자공학부 체크박스 상태변화시 동작
+    def select_electronic(self):
+        global set_depart
+        if '전자공학부' in set_depart[0].depart:#이미 있는 학부면 삭제
+            set_depart[0].delete_depart("전자공학부")
+            return
+        set_depart[0].append_depart("전자공학부")
+
+    #전기공학부 체크박스 상태변화시 동작
+    def select_electricity(self):
+        global set_depart
+        if '전기공학부' in set_depart[0].depart:#이미 있는 학부면 삭제
+            set_depart[0].delete_depart("전기공학부")
+            return
+        set_depart[0].append_depart("전기공학부")
 
 class ALARM_Window(QWidget):
     
