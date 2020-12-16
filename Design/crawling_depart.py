@@ -86,7 +86,6 @@ class depart_noti :
             for keyword in set_depart.keyword :
                 if keyword in title:    #키워드하나가 포함됨
                     include_keyword = 1
-
                     self.noti = str(self.num_max)+"["+self.depart+"] "+" : "+title+", 키워드 : "+keyword
                     self.send_noti(self.depart,self.noti)
                     #send_thread = threading.Thread(target = self.send_noti, args = (self.depart, self.noti))
@@ -109,8 +108,7 @@ class depart_noti :
 
     def store_history(self,noti): #알림내역 저장
         f1 = open(history_file, 'a')
-        f1.write(noti)
-        f1.write('\n')
+        f1.write(noti+'\n')
         f1.close()
 
     def load_recent(self,numbers):
@@ -129,5 +127,5 @@ class depart_noti :
                     if(self.pre_max<int(number.text)):
                         self.pre_max=int(number.text)
                         break
-            f1.write(str(self.pre_max))
+            f1.write(str(self.pre_max)+"\n")
             f1.close()
