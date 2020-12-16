@@ -48,7 +48,7 @@ class setting_depart: #GUI와 연결해야함
 
         f2 = open(keyword_file, 'w')
         for k in self.keyword:
-            f2.write(k)
+            f2.write(k+'\n')
         f2.close()
 
     def append_depart(self,depart): #학부 추가
@@ -67,5 +67,5 @@ class setting_depart: #GUI와 연결해야함
 
         f1 = open(keyword_file, 'w')
         for d in self.depart:
-            f1.write(d)
+            f1.write(d+'\n')
         f1.close()
