@@ -31,6 +31,7 @@ LOGIN_INFO = {
     'usr_id': '',
     'usr_pwd': ''
 }
+login_check = 0
 
 class depart_set(QWidget): #학부 설정창
 
@@ -300,6 +301,7 @@ class ALARM_Window(QWidget): #메인 GUI
     def lms_on_set(self):#LMS on/off 변경
         global lms_alarm_on
         global set_lms
+        global login_check
 
         if(lms_alarm_on[0]==1):#알람이 on이였으면
             lms_alarm_on[0]=0#off 시키기

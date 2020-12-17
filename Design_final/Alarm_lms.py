@@ -14,9 +14,12 @@ prev_file = "prev_noti.txt" #이전 알림 내역들
 new_file = "new_noti.txt" #비교할 알림 내역들
 toaster = ToastNotifier()
 
+noti_lms = ''
+
 def lms_notify(lms_alarm_on,set_lms):
 
     toaster = ToastNotifier()
+
     LOGIN_INFO['usr_id'] = set_lms[0].ID
     LOGIN_INFO['usr_pwd'] = set_lms[0].PW
 
@@ -24,7 +27,6 @@ def lms_notify(lms_alarm_on,set_lms):
     #1분마다 업데이트되는지 체크
     while lms_alarm_on[0] == 1:
         time.sleep(3) #60초
-        notfi_file = open(new_file,"w",encoding="utf8")
         with requests.session() as s:
             login_check = 0
 
@@ -39,37 +41,43 @@ def lms_notify(lms_alarm_on,set_lms):
             noti = bs(notification.content, 'html.parser')
             
         
-
-            for i,j in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text")):
-
-                i = re.sub('<.+?>', '', str(i), 0).strip()
-                i = i.replace('\n', '')
-                i = i.replace('\t', '')
-                #print(i)
-                print(i, file=notfi_file)
-                
-                j = re.sub('<.+?>', '', str(j), 0).strip()
-                j = j.replace('\n', '')
-                j = j.replace('\t', '')
-                j = j.replace('\r', '')
-                title = j.split(' ')
-                new = ' '.join(title[1:])
-                new = new.lstrip()
-                tit = title[0]
-                #print(tit+'\n'+new)
-                print(tit+'\n'+new+'\n', file=notfi_file)
-                
-                # k = re.sub('<.+?>', '', str(k), 0).strip()
-                # k = k.replace('\n', '')
-                # k = k.replace('\t', '')
-                # #print(k+'\n')
-                # print(k+'\n',file = notfi_file)
+            #데이터가공
+            process_noti(noti)
              
-        notfi_file.close()
+        get_change(toaster)
 
-        compare_noti(toaster)
+def process_noti(noti):
+    #데이터가공
+    global noti_lms
 
-def compare_noti(toaster): #파일 비교하는 부분
+    for i,j in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text")):
+
+        i = re.sub('<.+?>', '', str(i), 0).strip()
+        i = i.replace('\n', '')
+        i = i.replace('\t', '')
+        
+        #print(i, file=notfi_file)
+                
+        j = re.sub('<.+?>', '', str(j), 0).strip()
+        j = j.replace('\n', '')
+        j = j.replace('\t', '')
+        j = j.replace('\r', '')
+        title = j.split(' ')
+        new = ' '.join(title[1:])
+        new = new.lstrip()
+        tit = title[0]
+        
+        #print(tit+'\n'+new+'\n', file=notfi_file)
+                
+        noti_lms = i+'\n'+tit+'\n'+new+'\n'
+        store_history(noti_lms)
+
+def store_history(noti_lms): 
+    notfi_file = open(new_file,"w",encoding="utf8")
+    print(noti_lms, file = notfi_file)
+    notfi_file.close()
+
+def get_change(toaster): #파일 비교하는 부분, 변경사항 확인
 
     file_checker = 1 #f2가 정상적으로 열리면 1, 비정상이면 0의 값을 가짐
     

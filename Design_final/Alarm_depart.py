@@ -25,7 +25,7 @@ class depart_noti :
 
         self.toaster = ToastNotifier()
 
-    def get_change(self,depart_alarm_on,set_depart): #학부 setting값을 인자로 받음
+    def get_change(self,depart_alarm_on,set_depart): #학부 setting값을 인자로 받음, 변경사항 확인
         req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
@@ -120,7 +120,7 @@ class depart_noti :
         f1.write(noti+'\n')
         f1.close()
 
-    def load_recent(self,numbers):
+    def load_recent(self,numbers): 
          if os.path.isfile(history_file) and os.stat(history_file).st_size>0: #제일 최근 알림내역에서 공지사항 번호 추출
             f1 = open(history_file, 'r')
             notis = f1.readlines()
