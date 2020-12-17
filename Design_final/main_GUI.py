@@ -306,7 +306,7 @@ class ALARM_Window(QWidget): #메인 GUI
             print('lms 크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(lms_alarm_on[0]==0):#알람이 off이였으면
-            if login_check == 0:
+            if (LOGIN_INFO['usr_id'] == '' or LOGIN_INFO['usr_pwd'] == '' or login_check == 0):
                 QMessageBox.question(self,'Message','로그인을 먼저해주세요',QMessageBox.Ok)
                 self.button1.setCheckable(False)
                 self.button1.setCheckable(True)
