@@ -48,7 +48,7 @@ class depart_noti :
 
             notis = soup.select('tr' ) #tr태그 목록들
 
-            get_change_depart(notis,set_depart)
+            self.get_change_depart(notis,set_depart)
 
     def get_change_depart(notis,set_depart): #변경사항 확인
         num_txt = ''
