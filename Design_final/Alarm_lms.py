@@ -92,8 +92,8 @@ def get_change_lms(toaster): #파일 비교하는 부분, 변경사항 확인
         pass
 
     if file_checker == 1:
-        new_lines = new.readlines()
-        prev_lines = prev.readlines()
+        new_lines = load_recent(new)
+        prev_lines = load_recent(prev)
 
         for i in range(0,3):
             check = (new_lines[i] == prev_lines[i])
@@ -108,6 +108,8 @@ def get_change_lms(toaster): #파일 비교하는 부분, 변경사항 확인
         prev.close()
     new.close()
 
+def load_recent(file):
+    return file.readlines()
 
 def send_noti(noti,toaster): #윈도우10 알림창에 공지사항 알림 보냄
 
