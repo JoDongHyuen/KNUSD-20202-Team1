@@ -49,6 +49,9 @@ def alarm_lms_wait(lms_alarm_on,set_lms):
 def process_noti(noti):
     #데이터가공
     global noti_lms
+    global notfi_file
+
+    notfi_file = open(new_file,"w",encoding="utf8")
 
     for i,j in zip(noti.find_all(class_="notification_subject"),noti.find_all(class_="notification_text")):
 
@@ -71,11 +74,11 @@ def process_noti(noti):
                 
         noti_lms = i+'\n'+tit+'\n'+new+'\n'
         store_history(noti_lms)
+    
+    notfi_file.close()
 
 def store_history(noti_lms): 
-    notfi_file = open(new_file,"w",encoding="utf8")
     print(noti_lms, file = notfi_file)
-    notfi_file.close()
 
 def get_change_lms(toaster): #파일 비교하는 부분, 변경사항 확인
 
