@@ -1,7 +1,7 @@
 import os
 
-depart_file = "depart_list.txt"  # 나중에 파일경로 설정해야할수도 있음
-keyword_file = "keyword_list.txt"
+depart_file = "./DB/depart_list.txt"  # 나중에 파일경로 설정해야할수도 있음
+keyword_file = "./DB/keyword_list.txt"
 
 class setting_depart: #GUI와 연결해야함
     

@@ -2,7 +2,7 @@ import requests, time, threading, os
 from win10toast import ToastNotifier
 from bs4 import BeautifulSoup
 
-history_file = "history_depart.txt" #알림 내역들
+history_file = "./DB/history_depart.txt" #알림 내역들
 
 URL_dic = {'컴퓨터학부' : 'https://computer.knu.ac.kr/06_sub/02_sub.html',
            '전자공학부' : 'https://see.knu.ac.kr/content/board/notice.html',

@@ -10,8 +10,8 @@ LOGIN_INFO = {
     'usr_pwd': ''
 }
 
-prev_file = "prev_noti.txt" #이전 알림 내역들
-new_file = "new_noti.txt" #비교할 알림 내역들
+prev_file = "./DB/prev_noti.txt" #이전 알림 내역들
+new_file = "./DB/new_noti.txt" #비교할 알림 내역들
 toaster = ToastNotifier()
 
 noti_lms = ''

@@ -1,5 +1,5 @@
 
-import sys, threading, requests, json, re
+import sys, threading, requests, json, re, os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
@@ -9,6 +9,7 @@ from Alarm_depart import *
 from Alarm_lms import *
 
 #call by reference의 형태로 변수를 넘겨주기 위해, 리스트형태
+os.mkdir('./DB')
 
 depart_alarm_on = [] #학부의 현재 알람 on/off 상태 디폴트는 off인 0
 lms_alarm_on = [] #lms의 현재 알람 on/off 상태 디폴트는 off인 0
@@ -74,7 +75,6 @@ class depart_set(QWidget): #학부 설정창
         self.depart_com = QCheckBox('컴퓨터학부', self)
         self.depart_com.move(100,160)
         if len(set_depart[0].depart) == 0 :
-            print(len(set_depart[0].depart))
             self.depart_com.toggle()
         if '컴퓨터학부' in set_depart[0].depart:#현재 학부 선택 상태 반영
             self.depart_com.toggle()
@@ -340,6 +340,8 @@ class crawling_lms_thread(QThread):
         alarm_lms_wait(lms_alarm_on,set_lms)
 
 if __name__ == '__main__':
+
+   
 
     app = QApplication(sys.argv)
     windowExample = ALARM_Window()

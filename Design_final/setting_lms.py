@@ -1,6 +1,6 @@
 import os
 
-login_file = "login_lms.txt" # 나중에 파일경로 설정해야할수도 있다
+login_file = "./DB/login_lms.txt" # 나중에 파일경로 설정해야할수도 있다
 
 class setting_lms: #GUI와 연결해야함, lms역할분들이 참고할수있습니다.
 
