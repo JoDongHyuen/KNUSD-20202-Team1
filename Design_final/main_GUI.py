@@ -25,6 +25,7 @@ set_lms.append(set_l)
 departupdate_check.append(0)
 set_depart.append(set_d)
 
+
 # id / pwd에 본인 lms 아이디 비번 입력
 LOGIN_INFO = {
     'usr_id': '',
@@ -200,6 +201,8 @@ class lms_login(QWidget):
     def try_login(self,mode):  #mode = 1 수동, mode=2 자동  
         with requests.session() as s:
         
+            global login_check
+
             login_check = 0
 
             #로그인에 실패하면 login에 isError 가 True로 나타나서 이걸 이용해 exception 처리 예정
@@ -207,6 +210,7 @@ class lms_login(QWidget):
             login = login_req.text
             login = json.loads(login)
             if(login['isError'] == False):
+                login_check = 1
                 if mode ==1:
                     QMessageBox.question(self,'Message','로그인 성공',QMessageBox.Ok)
                     set_lms[0].set_login(self.id,self.pw) #로그인성공하면 ID/PW저장
@@ -302,7 +306,7 @@ class ALARM_Window(QWidget):
             print('lms 크롤링을 종료합니다')#테스트용 나중에 지울것
 
         elif(lmsupdate_check[0]==0):#알람이 off이였으면
-            if (LOGIN_INFO['usr_id'] == '' or LOGIN_INFO['usr_pwd'] == ''):
+            if login_check == 0:
                 QMessageBox.question(self,'Message','로그인을 먼저해주세요',QMessageBox.Ok)
                 self.button1.setCheckable(False)
                 self.button1.setCheckable(True)
