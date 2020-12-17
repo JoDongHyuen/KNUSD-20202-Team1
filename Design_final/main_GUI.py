@@ -330,14 +330,14 @@ class crawling_depart_thread(QThread):
 
     def run(self):
          depart_crawl = depart_noti(self.depart)
-         depart_crawl.get_change(depart_alarm_on,set_depart)
+         depart_crawl.alarm_depart_wait(depart_alarm_on,set_depart)
 
 class crawling_lms_thread(QThread):
     def __init__(self,parent):
         super().__init__(parent)
 
     def run(self):
-        lms_notify(lms_alarm_on,set_lms)
+        alarm_lms_wait(lms_alarm_on,set_lms)
 
 if __name__ == '__main__':
 

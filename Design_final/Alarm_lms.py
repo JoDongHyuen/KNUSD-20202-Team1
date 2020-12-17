@@ -16,7 +16,7 @@ toaster = ToastNotifier()
 
 noti_lms = ''
 
-def lms_notify(lms_alarm_on,set_lms):
+def alarm_lms_wait(lms_alarm_on,set_lms):
 
     toaster = ToastNotifier()
 
@@ -44,7 +44,7 @@ def lms_notify(lms_alarm_on,set_lms):
             #데이터가공
             process_noti(noti)
              
-        get_change(toaster)
+        get_change_lms(toaster)
 
 def process_noti(noti):
     #데이터가공
@@ -77,7 +77,7 @@ def store_history(noti_lms):
     print(noti_lms, file = notfi_file)
     notfi_file.close()
 
-def get_change(toaster): #파일 비교하는 부분, 변경사항 확인
+def get_change_lms(toaster): #파일 비교하는 부분, 변경사항 확인
 
     file_checker = 1 #f2가 정상적으로 열리면 1, 비정상이면 0의 값을 가짐
     
@@ -114,6 +114,6 @@ def send_noti(noti,toaster): #윈도우10 알림창에 공지사항 알림 보�
     title = 'LMS 알림'
 
     try:   
-        toaster.show_toast(title,noti,icon_path = None, duration =None, threaded=False) #3600초 알림지속
+        toaster.show_toast(title,noti,icon_path = None, duration =None, threaded=False) 
     except:
         pass

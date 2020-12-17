@@ -25,13 +25,11 @@ class depart_noti :
 
         self.toaster = ToastNotifier()
 
-    def get_change(self,depart_alarm_on,set_depart): #학부 setting값을 인자로 받음, 변경사항 확인
+        
+    def alarm_depart_wait(self,depart_alarm_on,set_depart): #학부 setting값을 인자로 받음, 
         req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
-
-        num_txt = ''
-        title = ''
 
         #가장 최근의 공지사항 번호 받아오기
         #numbers = soup.find_all(class_="bbs_num")
@@ -50,30 +48,36 @@ class depart_noti :
 
             notis = soup.select('tr' ) #tr태그 목록들
 
-            for noti in notis:
-                
-                num_html =noti.select(tagnum_dic[self.depart]) #tr태그에서 공지사항 번호
-                for n in num_html:
-                    num_txt = n.text 
-                if(len(num_txt)==0 or num_txt == ''  or num_txt == '공지' ):
-                    continue
-                
-                self.num_max = int(num_txt)
+            get_change_depart(notis,set_depart)
 
-                title_html= noti.select('td>a')   #tr태그에서 공지사항 제목
-                for t in title_html:
-                    title = t.text
+    def get_change_depart(notis,set_depart): #변경사항 확인
+        num_txt = ''
+        title = ''
 
-                if(self.num_max != '공지'): 
-                        if(self.num_max == self.pre_max+1) : #예를들어 가장 최근 공지사항이 2983번일때, 2984번이 있으면 변경사항 체크
-                            break
+        for noti in notis:      
+            num_html =noti.select(tagnum_dic[self.depart]) #tr태그에서 공지사항 번호
 
-            if(self.num_max == self.pre_max+1):        #변경사항 있을때, 키워드 체크
-                self.process_noti(title,set_depart[0])
+            for n in num_html:
+                num_txt = n.text 
+            if(len(num_txt)==0 or num_txt == ''  or num_txt == '공지' ):
+                continue
                 
-            else:                           #변경사항 없을때, 아무것도 안함, 밑에 출력은 테스트용
-                print("[변경사항없음]"+'['+self.depart+']')
-    
+            self.num_max = int(num_txt)
+
+            title_html= noti.select('td>a')   #tr태그에서 공지사항 제목
+            for t in title_html:
+                title = t.text
+
+            if(self.num_max != '공지'): 
+                if(self.num_max == self.pre_max+1) : #예를들어 가장 최근 공지사항이 2983번일때, 2984번이 있으면 변경사항 체크
+                    break
+
+        if(self.num_max == self.pre_max+1):        #변경사항 있을때, 키워드 체크
+            self.process_noti(title,set_depart[0])
+                
+        else:                           #변경사항 없을때, 아무것도 안함, 밑에 출력은 테스트용
+            print("[변경사항없음]"+'['+self.depart+']')
+
     def process_noti(self,title,set_depart): #키워드 체크+알림 가공
         set_depart.load()
         title = title.replace('\t', '')
