@@ -113,7 +113,7 @@ class depart_noti :
         title = depart + ' 홈페이지'
        
         try:
-            self.toaster.show_toast(title,noti,icon_path = None, duration =None, threaded = False) 
+            self.toaster.show_toast(title,noti,icon_path = '', duration =None, threaded = False) 
         except :
             pass
 

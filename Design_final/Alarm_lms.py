@@ -116,6 +116,6 @@ def send_noti(noti,toaster): #윈도우10 알림창에 공지사항 알림 보�
     title = 'LMS 알림'
 
     try:   
-        toaster.show_toast(title,noti,icon_path = None, duration =None, threaded=False) 
+        toaster.show_toast(title,noti,icon_path ='', duration =None, threaded=False) 
     except:
         pass
