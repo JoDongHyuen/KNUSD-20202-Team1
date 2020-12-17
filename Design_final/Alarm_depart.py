@@ -50,7 +50,7 @@ class depart_noti :
 
             self.get_change_depart(notis,set_depart)
 
-    def get_change_depart(notis,set_depart): #변경사항 확인
+    def get_change_depart(self,notis,set_depart): #변경사항 확인
         num_txt = ''
         title = ''
 
