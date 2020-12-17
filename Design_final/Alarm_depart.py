@@ -18,14 +18,14 @@ tagnum_dic = {'컴퓨터학부' : "td.bbs_num", #학부홈페이지마다 태그
 class depart_noti :
     def __init__(self,depart) :
         self.depart = depart
-        self.noti = ''
-        #self.send_thread_list = [] #각 알림을 쓰레드를 사용하고, 쓰레드들의 리스트
+        self.noti_depart = ''
+
         self.num_max = 0
         self.pre_max = 0
 
         self.toaster = ToastNotifier()
 
-    def get_change(self,departupdate_check,set_depart): #학부 setting값을 인자로 받음
+    def get_change(self,depart_alarm_on,set_depart): #학부 setting값을 인자로 받음
         req = requests.get(URL_dic[self.depart])
         html = req.text
         soup = BeautifulSoup(html,'html.parser')
@@ -39,7 +39,7 @@ class depart_noti :
         self.load_recent(numbers)
 
         #1분마다 업데이트되는지 체크
-        while departupdate_check[0] == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
+        while depart_alarm_on[0] == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
             time.sleep(3) #60초
 
@@ -69,26 +69,23 @@ class depart_noti :
                             break
 
             if(self.num_max == self.pre_max+1):        #변경사항 있을때, 키워드 체크
-                self.check_keyword(title,set_depart[0])
+                self.process_noti(title,set_depart[0])
                 
             else:                           #변경사항 없을때, 아무것도 안함, 밑에 출력은 테스트용
                 print("[변경사항없음]"+'['+self.depart+']')
     
-    def check_keyword(self,title,set_depart):
+    def process_noti(self,title,set_depart): #키워드 체크+알림 가공
         set_depart.load()
         title = title.replace('\t', '')
         title = title.replace('\r', '')
         title = title.replace('\n', '')
 
         if not set_depart.keyword:   #키워드리스트 설정안했을때
-            self.noti = str(self.num_max)+"["+self.depart+"] "+" : "+title
-            self.send_noti(self.depart,self.noti)
-            #send_thread = threading.Thread(target = self.send_noti, args = (self.depart, self.noti))
-            #self.send_thread_list.append(send_thread)
-            #send_thread.start()
+            self.noti_depart = str(self.num_max)+"["+self.depart+"] "+" : "+title
+            self.send_noti(self.depart,self.noti_depart)
 
-            print("[변경사항있고, 키워드설정x]"+self.noti)
-            self.store_history(self.noti)
+            print("[변경사항있고, 키워드설정x]"+self.noti_depart)
+            self.store_history(self.noti_depart)
 
         else:                      #키워드리스트 설정했을때
             include_keyword = 0
@@ -96,14 +93,11 @@ class depart_noti :
             for keyword in set_depart.keyword :
                 if keyword in title:    #키워드하나가 포함됨
                     include_keyword = 1
-                    self.noti = str(self.num_max)+"["+self.depart+"] "+" : "+title+", 키워드 : "+keyword
-                    self.send_noti(self.depart,self.noti)
-                    #send_thread = threading.Thread(target = self.send_noti, args = (self.depart, self.noti))
-                    #self.send_thread_list.append(send_thread)
-                    #send_thread.start()
+                    self.noti_depart = str(self.num_max)+"["+self.depart+"] "+" : "+title+", 키워드 : "+keyword
+                    self.send_noti(self.depart,self.noti_depart)
 
-                    print("[변경사항있고, 키워드포함o]"+self.noti)
-                    self.store_history(self.noti)
+                    print("[변경사항있고, 키워드포함o]"+self.noti_depart)
+                    self.store_history(self.noti_depart)
                     break
 
             if include_keyword == 0: #테스트 전용, 원래는 키워드 포함되어있지않으면, 아무것도안함

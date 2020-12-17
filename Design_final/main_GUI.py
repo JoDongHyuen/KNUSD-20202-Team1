@@ -5,13 +5,13 @@ from PyQt5.QtCore import *
 
 from setting_depart import *
 from setting_lms import *
-from crawling_depart import *
-from lms_crawling import *
+from Alarm_depart import *
+from Alarm_lms import *
 
 #call by reference의 형태로 변수를 넘겨주기 위해, 리스트형태
 
-departupdate_check = [] #학부의 현재 알람 on/off 상태 디폴트는 off인 0
-lmsupdate_check = [] #lms의 현재 알람 on/off 상태 디폴트는 off인 0
+depart_alarm_on = [] #학부의 현재 알람 on/off 상태 디폴트는 off인 0
+lms_alarm_on = [] #lms의 현재 알람 on/off 상태 디폴트는 off인 0
 set_depart = [] #setting_depart 파일의 클래스
 set_lms = [] #setting_lms 파일의 클래스
 
@@ -20,9 +20,9 @@ set_d.load()
 set_l = setting_lms()
 set_l.load()
 
-lmsupdate_check.append(0)
+lms_alarm_on.append(0)
 set_lms.append(set_l)
-departupdate_check.append(0)
+depart_alarm_on.append(0)
 set_depart.append(set_d)
 
 
@@ -32,7 +32,7 @@ LOGIN_INFO = {
     'usr_pwd': ''
 }
 
-class depart_set(QWidget):
+class depart_set(QWidget): #학부 설정창
 
     def __init__(self):
         super().__init__()
@@ -156,7 +156,7 @@ class depart_set(QWidget):
             return
         set_depart[0].append_depart("전기공학과")
 
-class lms_login(QWidget):
+class lms_login(QWidget): #lms 로그인창
     def __init__(self):
         self.id = ''
         self.pw = ''
@@ -222,7 +222,7 @@ class lms_login(QWidget):
                 QMessageBox.question(self,'Message','ID/PW를 확인하십시오',QMessageBox.Ok)
 
 
-class ALARM_Window(QWidget):
+class ALARM_Window(QWidget): #메인 GUI
     
 
     def __init__(self):
@@ -255,39 +255,39 @@ class ALARM_Window(QWidget):
         self.button1 = QPushButton('On/Off')
         grid_layout.addWidget(self.button1, 1, 0)
         self.button1.setCheckable(True)
-        self.button1.toggled.connect(self.crawling_lms_state)#lms on/off버튼에 기능 연결
+        self.button1.toggled.connect(self.lms_on_set)#lms on/off버튼에 기능 연결
 
         self.button2 = QPushButton('로그인')
-        self.button2.clicked.connect(self.pushButtontoLogin)
+        self.button2.clicked.connect(self.lms_setting)
         grid_layout.addWidget(self.button2, 2, 0)
 
         self.button3 = QPushButton('On/Off')
         grid_layout.addWidget(self.button3, 1, 1)
         self.button3.setCheckable(True)
-        self.button3.toggled.connect(self.crawling_depart_state)#depart on/off버튼에 기능 연결
+        self.button3.toggled.connect(self.depart_on_set)#depart on/off버튼에 기능 연결
 
         self.button4 = QPushButton('설정')
         grid_layout.addWidget(self.button4, 2, 1)
-        self.button4.clicked.connect(self.d_setting)
+        self.button4.clicked.connect(self.depart_setting)
 
         # initUI 세팅
         self.setWindowTitle('통합 알림 시스템')
         self.resize(400,200)
         self.show()
 
-    def d_setting(self):
+    def depart_setting(self):
         self.d_s.show()
 
-    def crawling_depart_state(self):#학부 on/off 변경
-        global departupdate_check
+    def depart_on_set(self):#학부 on/off 변경
+        global depart_alarm_on
         global set_depart
         
-        if(departupdate_check[0]==1):#알람이 on이였으면
-            departupdate_check[0]=0#off 시키기
+        if(depart_alarm_on[0]==1):#알람이 on이였으면
+            depart_alarm_on[0]=0#off 시키기
             print('학부 크롤링을 종료합니다')#테스트용 나중에 지울것
 
-        elif(departupdate_check[0]==0):#알람이 off이였으면
-            departupdate_check[0]=1#on 시키기
+        elif(depart_alarm_on[0]==0):#알람이 off이였으면
+            depart_alarm_on[0]=1#on 시키기
 
             print('학부 크롤링을 시작합니다')#테스트용 나중에 지울것
             set_depart[0].load()
@@ -297,28 +297,28 @@ class ALARM_Window(QWidget):
                 crawl_thread_depart.start()
                 
 
-    def crawling_lms_state(self):#LMS on/off 변경
-        global lmsupdate_check
+    def lms_on_set(self):#LMS on/off 변경
+        global lms_alarm_on
         global set_lms
 
-        if(lmsupdate_check[0]==1):#알람이 on이였으면
-            lmsupdate_check[0]=0#off 시키기
+        if(lms_alarm_on[0]==1):#알람이 on이였으면
+            lms_alarm_on[0]=0#off 시키기
             print('lms 크롤링을 종료합니다')#테스트용 나중에 지울것
 
-        elif(lmsupdate_check[0]==0):#알람이 off이였으면
+        elif(lms_alarm_on[0]==0):#알람이 off이였으면
             if login_check == 0:
                 QMessageBox.question(self,'Message','로그인을 먼저해주세요',QMessageBox.Ok)
                 self.button1.setCheckable(False)
                 self.button1.setCheckable(True)
             else:
-                lmsupdate_check[0]=1#on 시키기
+                lms_alarm_on[0]=1#on 시키기
 
                 print('lms 크롤링을 시작합니다')#테스트용 나중에 지울것
                 set_lms[0].load()
                 crawl_thread_lms = crawling_lms_thread(self)
                 crawl_thread_lms.start()
 
-    def pushButtontoLogin(self):
+    def lms_setting(self):
         self.lms_login.show()
     
 class crawling_depart_thread(QThread):
@@ -328,14 +328,14 @@ class crawling_depart_thread(QThread):
 
     def run(self):
          depart_crawl = depart_noti(self.depart)
-         depart_crawl.get_change(departupdate_check,set_depart)
+         depart_crawl.get_change(depart_alarm_on,set_depart)
 
 class crawling_lms_thread(QThread):
     def __init__(self,parent):
         super().__init__(parent)
 
     def run(self):
-        lms_notify(lmsupdate_check,set_lms)
+        lms_notify(lms_alarm_on,set_lms)
 
 if __name__ == '__main__':
 

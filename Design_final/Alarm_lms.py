@@ -10,11 +10,11 @@ LOGIN_INFO = {
     'usr_pwd': ''
 }
 
-prev_file = "prev_lms.txt" #이전 알림 내역들
-new_file = "new_lms.txt" #비교할 알림 내역들
+prev_file = "prev_noti.txt" #이전 알림 내역들
+new_file = "new_noti.txt" #비교할 알림 내역들
 toaster = ToastNotifier()
 
-def lms_notify(lmsupdate_check,set_lms):
+def lms_notify(lms_alarm_on,set_lms):
 
     toaster = ToastNotifier()
     LOGIN_INFO['usr_id'] = set_lms[0].ID
@@ -22,9 +22,9 @@ def lms_notify(lmsupdate_check,set_lms):
 
 
     #1분마다 업데이트되는지 체크
-    while lmsupdate_check[0] == 1:
+    while lms_alarm_on[0] == 1:
         time.sleep(3) #60초
-        notfi_file = open("new_lms.txt","w",encoding="utf8")
+        notfi_file = open(new_file,"w",encoding="utf8")
         with requests.session() as s:
             login_check = 0
 
@@ -67,19 +67,19 @@ def lms_notify(lmsupdate_check,set_lms):
              
         notfi_file.close()
 
-        compare_file(toaster)
+        compare_noti(toaster)
 
-def compare_file(toaster): #파일 비교하는 부분
+def compare_noti(toaster): #파일 비교하는 부분
 
     file_checker = 1 #f2가 정상적으로 열리면 1, 비정상이면 0의 값을 가짐
     
-    new = open("new_lms.txt", "r", encoding="utf8")
+    new = open(new_file, "r", encoding="utf8")
     #처음에 사용하면 prev.txt가 생성안되어서 try, except로 new.txt를
     #prev.txt로 복사하도록 처리하였음
     try:
-        prev = open("prev_lms.txt", "r", encoding="utf8")
+        prev = open(prev_file, "r", encoding="utf8")
     except:
-        shutil.copy("new_lms.txt","prev_lms.txt")
+        shutil.copy(new_file,prev_file)
         file_checker = 0
         pass
 
@@ -94,7 +94,7 @@ def compare_file(toaster): #파일 비교하는 부분
                 print("[LMS 변동사항 확인]")
                 alarm_string = new_lines[0] + new_lines[1] + new_lines[2]
                 send_noti(alarm_string,toaster)
-                shutil.copy("new_lms.txt","prev_lms.txt")
+                shutil.copy(new_file,prev_file)
                 break
 
         prev.close()
