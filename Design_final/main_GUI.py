@@ -9,7 +9,8 @@ from Alarm_depart import *
 from Alarm_lms import *
 
 #call by reference의 형태로 변수를 넘겨주기 위해, 리스트형태
-os.mkdir('./DB')
+if not os.path.isdir('./DB'):
+    os.mkdir('./DB')
 
 depart_alarm_on = [] #학부의 현재 알람 on/off 상태 디폴트는 off인 0
 lms_alarm_on = [] #lms의 현재 알람 on/off 상태 디폴트는 off인 0
