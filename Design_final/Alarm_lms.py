@@ -26,7 +26,7 @@ def alarm_lms_wait(lms_alarm_on,set_lms):
 
     #1분마다 업데이트되는지 체크
     while lms_alarm_on[0] == 1:
-        time.sleep(3) #60초
+        time.sleep(60) #60초
         with requests.session() as s:
             login_check = 0
 

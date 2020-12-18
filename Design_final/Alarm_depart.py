@@ -39,7 +39,7 @@ class depart_noti :
         #1분마다 업데이트되는지 체크
         while depart_alarm_on[0] == 1:  #ON/OFF에서 OFF시 update_check = 0으로 함
             print('가장 최근의 공지사항 번호는 ',self.pre_max, '이다.')
-            time.sleep(3) #60초
+            time.sleep(60) #60초
 
             req = requests.get(URL_dic[self.depart])
             
